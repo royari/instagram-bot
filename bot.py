@@ -87,24 +87,57 @@ class InstaBot:
         
         '''
         button=self.driver.find_elements_by_xpath("//*[(text()='{}')]".format(button_name))
+
         return button
 
+
+
+    def download_all_images(self,user):
+        #TODO neeed to do thissss!!!!!!
+        self.nav_user(user)
+        img_srcs=[]
+        finished=False
+        while not finished:
+            finished=self.infinite_scroll(user)
+            
+            for img in self.driver.find_elements_by_class_name('_9AhH0'):
+                print(img.__dict__)
+        
+
+
+
+
+
     def infinite_scroll(self,user):
-        #self.nav_user(user)
+
         '''
-        #TODO infinite scroll
+            scrolls all the to the bottom of the sea
+            arg:
+                user:str: enter the instagram user id
         '''
-        pass
+        pause_time=1
+        self.last_height=self.driver.execute_script("return document.body.scrollHeight")
+        self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+        time.sleep(pause_time)
+        self.new_hight=self.driver.execute_script("document.body.scrollHeight")
+
+        if self.new_hight==self.last_height:
+            return True
+        
+        self.last_height=self.new_hight
+        return False
+        
         
 
 if __name__ == "__main__":
-    ig_bot=InstaBot("temp","temp")
+    ig_bot=InstaBot("temp","Temp")
     #time.sleep(3)̀̀
-    #ig_bot.nav_user("vsauce")
-    # ig_bot.follow_user("selenagomez")
+    ig_bot.nav_user("alpharoy14")
+    # time.sleep(5)    # ig_bot.follow_user("selenagomez")
     # time.sleep(2)
     #ig_bot.unfollow_user("selenagomez")
-    ig_bot.search_tag("piano")
+    # ig_bot.search_tag("piano")
+    ig_bot.download_all_images("alpharoy14")
     print (ig_bot.username)
 
 
