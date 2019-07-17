@@ -30,12 +30,18 @@ class InstaBot:
         self.driver.find_element_by_name("username").send_keys(self.username)
         self.driver.find_element_by_name("password").send_keys(self.password)
         self.driver.find_elements_by_xpath("//div[contains(text(), 'Log In')]")[0].click() 
-        #?why is Log in working with single quote and not double quote? WTF?
+        #?why is Log in working with single quote and not double quote? WTF? 
+        #* Its to avoid confusion when closing the quotes LOL.
         self.driver.get(f'{self.baseURL}alpharoy14')
+   
     def nav_user(self,user):
+        """
+        navigates to the users page
+        """
         self.driver.get(f'{self.baseURL}{user}')
+    
     def follow_user(self,user):
-        self.nav_user()
+        self.nav_user(user)
         #TODO follow button
 
 
