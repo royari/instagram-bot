@@ -1,4 +1,5 @@
 from selenium import webdriver  
+from selenium.webdriver.chrome.options import Options
 import os
 import time
 
@@ -19,8 +20,12 @@ class InstaBot:
         self.baseURL="https://www.instagram.com/"
         self.username = username  
         self.password = password
-        self.driver = webdriver.Chrome("./chromedriver")
+        self.chrome_options=Options()
+        self.chrome_options.add_argument("--disable-infobars")
+        self.driver = webdriver.Chrome(executable_path="./chromedriver",\
+            options=self.chrome_options)
         self.login()
+        self.search_tags="https://www.instagram.com/explore/tags/{}/"
         
         
 
@@ -42,16 +47,66 @@ class InstaBot:
     
     def follow_user(self,user):
         self.nav_user(user)
-        #TODO follow button
+        '''
+        follows a user by clicking the follow button
+        args:
+            user:str: user id of the user
+        '''
+        buttons=self.find_button("Follow")
+        for btn in buttons:
+            print(f"{btn}\n")
+            btn.click()
+    def unfollow_user(self,user):
+        '''
+        unfollows a user
+        arg:
+            user:str: the user name of the user
+        '''
+        self.nav_user(user)
+        buttons=self.find_button("Following")
+        for btn in buttons:
+            btn.click()
+        unfollow_button=self.find_button("Unfollow")
+        unfollow_button[0].click()
+
+    def search_tag(self,tag):
+        '''
+        search instagram with a specific tag 
+
+        arg:
+            tag:str: the tag that you want to search 
+        '''
+        self.driver.get(self.search_tags.format(tag))
 
 
+    def find_button(self,button_name):
+        ''' 
+        find the button by searching by the name
+        arg:
+            #* button_name:str: name of the button
+        
+        '''
+        button=self.driver.find_elements_by_xpath("//*[(text()='{}')]".format(button_name))
+        return button
 
+    def infinite_scroll(self,user):
+        #self.nav_user(user)
+        '''
+        #TODO infinite scroll
+        '''
+        pass
+        
 
 if __name__ == "__main__":
-    ig_bot=InstaBot("Temp","Temp")
-    time.sleep(3)
-    ig_bot.nav_user("alpharoy14")
+    ig_bot=InstaBot("temp","temp")
+    #time.sleep(3)̀̀
+    #ig_bot.nav_user("vsauce")
+    # ig_bot.follow_user("selenagomez")
+    # time.sleep(2)
+    #ig_bot.unfollow_user("selenagomez")
+    ig_bot.search_tag("piano")
     print (ig_bot.username)
+
 
 
 
